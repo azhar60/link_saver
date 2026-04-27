@@ -45,7 +45,7 @@ Goal: a working Rails 8 app with Postgres where you can manually create a link r
   - Run `rails db:create`
   - Initial commit: `chore: initialize Rails 8 app with Postgres and Tailwind`
 
-- [ ] **Day 2 — Generate the Link model**
+- [x] **Day 2 — Generate the Link model**
   - Scaffold: `rails g scaffold Link url:string title:string summary:text tags:string status:string`
   - Add a default value to `status` in the migration (default: `"pending"`)
   - Run `rails db:migrate`

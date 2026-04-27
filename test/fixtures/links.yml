@@ -1,0 +1,13 @@
+one:
+  url: https://example.com/one
+  title: Example One
+  summary: First example summary.
+  tags: ruby,rails
+  status: pending
+
+two:
+  url: https://example.com/two
+  title: Example Two
+  summary: Second example summary.
+  tags: hotwire,turbo
+  status: ready
