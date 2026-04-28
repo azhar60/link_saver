@@ -53,7 +53,7 @@ Goal: a working Rails 8 app with Postgres where you can manually create a link r
   - Add an enum: `enum :status, { pending: "pending", processing: "processing", ready: "ready", failed: "failed" }`
   - Commit: `feat: add Link model with scaffold`
 
-- [ ] **Day 3 — Clean up the scaffolded UI**
+- [x] **Day 3 — Clean up the scaffolded UI**
   - Update `app/views/links/index.html.erb` to show links as cards (title, summary preview, tags)
   - Style with Tailwind utility classes
   - Use a clean grid layout (responsive: 1 column mobile, 2-3 columns desktop)

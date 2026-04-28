@@ -1,22 +1,28 @@
-<div id="<%= dom_id link %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Url:</strong>
-    <%= link.url %>
+<%
+  status_classes = {
+    "ready"      => "bg-green-100 text-green-700",
+    "processing" => "bg-blue-100 text-blue-700",
+    "failed"     => "bg-red-100 text-red-700",
+    "pending"    => "bg-gray-100 text-gray-600"
+  }
+%>
+<%= link_to link, id: dom_id(link), class: "block bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md hover:border-gray-300 transition" do %>
+  <div class="flex items-start justify-between gap-3 mb-2">
+    <h2 class="font-semibold text-lg text-gray-900 line-clamp-2"><%= link.title.presence || link.url %></h2>
+    <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full <%= status_classes[link.status] %>"><%= link.status %></span>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Title:</strong>
-    <%= link.title %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Summary:</strong>
-    <%= link.summary %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Tags:</strong>
-    <%= link.tags %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= link.status %>
-  </div>
-</div>
+
+  <p class="text-sm text-gray-500 truncate mb-3"><%= link.url %></p>
+
+  <% if link.summary.present? %>
+    <p class="text-sm text-gray-700 line-clamp-3 mb-3"><%= link.summary %></p>
+  <% end %>
+
+  <% if link.tags.present? %>
+    <div class="flex flex-wrap gap-1.5">
+      <% link.tags.split(",").map(&:strip).reject(&:blank?).each do |tag| %>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700"><%= tag %></span>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
