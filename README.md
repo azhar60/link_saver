@@ -1,24 +1,60 @@
-# README
+# Link Saver
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A personal Rails 8 app that saves URLs, fetches their content, and uses Gemini AI to generate summaries and tags. Built with Hotwire (Turbo + Stimulus) and Tailwind CSS.
 
-Things you may want to cover:
+## Tech stack
 
-* Ruby version
+- Ruby 3.3.0
+- Rails 8.0 with Hotwire
+- PostgreSQL
+- Tailwind CSS
+- Solid Queue (background jobs) and Solid Cable (WebSockets / Turbo Streams)
+- Gemini API (`gemini-2.5-flash-lite`) for summaries and tags
+- HTTParty + Nokogiri for fetching and parsing pages
 
-* System dependencies
+## Prerequisites
 
-* Configuration
+- Ruby 3.3.0 (the repo pins this in `.ruby-version`)
+- PostgreSQL running locally (default user/socket — no password configured)
+- A free Gemini API key — get one at https://aistudio.google.com/apikey
 
-* Database creation
+## Setup
 
-* Database initialization
+```bash
+# 1. Install dependencies
+bundle install
 
-* How to run the test suite
+# 2. Create your local .env file
+#    Add a line: GEMINI_API_KEY=<your-key-from-aistudio.google.com>
+#    .env is gitignored — never commit it.
 
-* Services (job queues, cache servers, search engines, etc.)
+# 3. Create and migrate the databases
+bin/rails db:create db:migrate
+```
 
-* Deployment instructions
+### Required environment variables
 
-* ...
+The app reads these from `.env` (loaded automatically by `dotenv-rails`):
+
+| Variable         | Required | Notes                                                             |
+| ---------------- | -------- | ----------------------------------------------------------------- |
+| `GEMINI_API_KEY` | yes      | Free key from https://aistudio.google.com/apikey. Never commit it. |
+
+`.env` is gitignored — every developer creates their own.
+
+## Running the app
+
+```bash
+bin/rails server     # http://localhost:3000/links
+bin/jobs             # background worker (Solid Queue)
+```
+
+## Tests
+
+```bash
+bin/rails test
+```
+
+## Project plan
+
+See [`PLAN.md`](PLAN.md) for the day-by-day build plan.

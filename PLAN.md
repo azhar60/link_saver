@@ -59,7 +59,7 @@ Goal: a working Rails 8 app with Postgres where you can manually create a link r
   - Use a clean grid layout (responsive: 1 column mobile, 2-3 columns desktop)
   - Commit: `style: card layout for links index`
 
-- [ ] **Day 4 — Set up environment variables**
+- [x] **Day 4 — Set up environment variables**
   - Create `.env` file (verify it's in `.gitignore`)
   - Add `GEMINI_API_KEY=` placeholder with instructions in README
   - Get a free key from aistudio.google.com and store locally (do NOT commit)
