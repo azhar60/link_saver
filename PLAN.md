@@ -72,7 +72,7 @@ Goal: a working Rails 8 app with Postgres where you can manually create a link r
 
 Goal: when you paste a URL, the app fetches the page and extracts its title and main text.
 
-- [ ] **Day 5 — Create a PageFetcher service**
+- [x] **Day 5 — Create a PageFetcher service**
   - Create `app/services/page_fetcher.rb`
   - Method: `PageFetcher.fetch(url)` returns `{ title:, content: }` or `nil` on error
   - Use HTTParty with 10-second timeout, follow redirects
