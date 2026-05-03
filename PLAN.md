@@ -80,7 +80,7 @@ Goal: when you paste a URL, the app fetches the page and extracts its title and 
   - Truncate content to 6000 chars
   - Commit: `feat: add PageFetcher service`
 
-- [ ] **Day 6 — Wire fetching into the create action**
+- [x] **Day 6 — Wire fetching into the create action**
   - In `LinksController#create`, call `PageFetcher.fetch(url)` before save
   - Populate `title` from the fetched data
   - Handle fetch failure gracefully (save with default title, flash a warning)

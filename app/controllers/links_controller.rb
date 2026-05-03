@@ -23,8 +23,11 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
 
+    fetch_succeeded = @link.valid? ? @link.populate_metadata : true
+
     respond_to do |format|
       if @link.save
+        flash[:alert] = "Saved, but couldn't fetch the page — title set from the URL." unless fetch_succeeded
         format.html { redirect_to @link, notice: "Link was successfully created." }
         format.json { render :show, status: :created, location: @link }
       else
