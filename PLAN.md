@@ -86,7 +86,7 @@ Goal: when you paste a URL, the app fetches the page and extracts its title and 
   - Handle fetch failure gracefully (save with default title, flash a warning)
   - Commit: `feat: auto-populate title from URL on create`
 
-- [ ] **Day 7 — Write a test for PageFetcher**
+- [x] **Day 7 — Write a test for PageFetcher**
   - Use WebMock to mock HTTP responses
   - Test: valid URL returns title and content, bad URL returns nil
   - Commit: `test: add PageFetcher specs`
