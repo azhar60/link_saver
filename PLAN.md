@@ -97,7 +97,7 @@ Goal: when you paste a URL, the app fetches the page and extracts its title and 
 
 Goal: the app calls Gemini to generate a summary and tags for each link.
 
-- [ ] **Day 8 — Create a GeminiClient service**
+- [x] **Day 8 — Create a GeminiClient service**
   - Create `app/services/gemini_client.rb`
   - Method: `GeminiClient.summarize(text)` returns `{ summary:, tags: [] }`
   - Use the endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent`
