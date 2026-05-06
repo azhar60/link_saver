@@ -105,7 +105,7 @@ Goal: the app calls Gemini to generate a summary and tags for each link.
   - Parse the JSON from response, strip any markdown fences
   - Commit: `feat: add GeminiClient service`
 
-- [ ] **Day 9 — Wire AI into the create flow (synchronous for now)**
+- [x] **Day 9 — Wire AI into the create flow (synchronous for now)**
   - In `LinksController#create`, after fetching the page, call `GeminiClient.summarize(content)`
   - Save `summary` and `tags` (join array with commas) on the Link
   - Set status to `ready` on success, `failed` on error

@@ -16,6 +16,11 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create link" do
+    stub_request(:get, "https://example.com/one")
+      .to_return(status: 200, body: "<html><head><title>Stubbed</title></head><body>hello</body></html>")
+    stub_request(:post, %r{generativelanguage\.googleapis\.com})
+      .to_return(status: 200, body: { candidates: [ { content: { parts: [ { text: '{"summary":"s","tags":["a"]}' } ] } } ] }.to_json)
+
     assert_difference("Link.count") do
       post links_url, params: { link: { status: @link.status, summary: @link.summary, tags: @link.tags, title: @link.title, url: @link.url } }
     end

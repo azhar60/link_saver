@@ -23,7 +23,7 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
 
-    fetch_succeeded = @link.valid? ? @link.populate_metadata : true
+    fetch_succeeded = @link.valid? ? @link.process_via_ai : true
 
     respond_to do |format|
       if @link.save
