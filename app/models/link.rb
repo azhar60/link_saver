@@ -7,11 +7,17 @@ class Link < ApplicationRecord
   # Sets status to :ready on success, :failed if the page or AI step fails.
   # Returns true if the page was fetched, false if the fetch failed
   # (caller can flash a warning about the fallback title).
+  # Always returns gracefully — never raises.
   def process_via_ai
     fetched = PageFetcher.fetch(url)
     self.title = fetched&.dig(:title).presence || fallback_title if title.blank?
     apply_ai_summary(fetched&.dig(:content))
     fetched.present?
+  rescue => e
+    Rails.logger.warn("[Link#process_via_ai] #{id || url}: #{e.class} #{e.message}")
+    self.title = fallback_title if title.blank?
+    self.status = :failed
+    false
   end
 
   private

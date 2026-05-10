@@ -1,5 +1,5 @@
 class LinksController < ApplicationController
-  before_action :set_link, only: %i[ show edit update destroy ]
+  before_action :set_link, only: %i[ show edit update destroy regenerate ]
 
   # GET /links or /links.json
   def index
@@ -48,6 +48,13 @@ class LinksController < ApplicationController
         format.json { render json: @link.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # POST /links/1/regenerate
+  def regenerate
+    @link.process_via_ai
+    @link.save
+    redirect_to @link, notice: @link.ready? ? "Summary regenerated." : "Couldn't generate a summary — try again later."
   end
 
   # DELETE /links/1 or /links/1.json

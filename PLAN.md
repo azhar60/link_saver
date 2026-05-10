@@ -111,7 +111,7 @@ Goal: the app calls Gemini to generate a summary and tags for each link.
   - Set status to `ready` on success, `failed` on error
   - Commit: `feat: generate AI summary and tags on link create`
 
-- [ ] **Day 10 — Handle AI failures gracefully**
+- [x] **Day 10 — Handle AI failures gracefully**
   - Wrap GeminiClient calls in error handling
   - If API fails, save the link with status `failed`, show a "Retry summary" button
   - Commit: `feat: graceful handling of AI failures`

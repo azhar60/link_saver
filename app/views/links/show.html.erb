@@ -2,10 +2,20 @@
 
 <div class="md:w-2/3 w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing link</h1>
+  <h1 class="font-bold text-4xl mb-4">Showing link</h1>
+
+  <% if @link.failed? %>
+    <div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="text-red-800">
+        <strong class="font-semibold">Couldn't summarize this page.</strong>
+        <p class="text-sm">The page might be unreachable or the AI service is unavailable.</p>
+      </div>
+      <%= button_to "Retry summary", regenerate_link_path(@link), method: :post, class: "shrink-0 rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer" %>
+    </div>
+  <% end %>
 
   <%= render @link %>
 
