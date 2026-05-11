@@ -116,7 +116,7 @@ Goal: the app calls Gemini to generate a summary and tags for each link.
   - If API fails, save the link with status `failed`, show a "Retry summary" button
   - Commit: `feat: graceful handling of AI failures`
 
-- [ ] **Day 11 — Add a "Regenerate summary" button**
+- [x] **Day 11 — Add a "Regenerate summary" button**
   - Add `regenerate` action on LinksController (POST route)
   - Button on the link show page
   - Commit: `feat: add regenerate summary button`
