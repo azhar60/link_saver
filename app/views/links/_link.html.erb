@@ -18,11 +18,5 @@
     <p class="text-sm text-gray-700 line-clamp-3 mb-3"><%= link.summary %></p>
   <% end %>
 
-  <% if link.tags.present? %>
-    <div class="flex flex-wrap gap-1.5">
-      <% link.tags.split(",").map(&:strip).reject(&:blank?).each do |tag| %>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700"><%= tag %></span>
-      <% end %>
-    </div>
-  <% end %>
+  <%= render "tag_chips", link: link %>
 <% end %>

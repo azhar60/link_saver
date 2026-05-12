@@ -127,7 +127,7 @@ Goal: the app calls Gemini to generate a summary and tags for each link.
 
 Goal: actually useful for daily use — search, tag filtering, better UI.
 
-- [ ] **Day 12 — Display tags as clickable chips**
+- [x] **Day 12 — Display tags as clickable chips**
 - [ ] **Day 13 — Filter links by tag**
 - [ ] **Day 14 — Add full-text search**
 - [ ] **Day 15 — Add pagination**

@@ -3,6 +3,10 @@ class Link < ApplicationRecord
 
   validates :url, presence: true, format: { with: %r{\Ahttps?://}, message: "must start with http:// or https://" }
 
+  def tag_list
+    tags.to_s.split(",").map(&:strip).reject(&:blank?)
+  end
+
   # Fetches the page, fills in title (if blank), and asks Gemini to summarize.
   # Sets status to :ready on success, :failed if the page or AI step fails.
   # Returns true if the page was fetched, false if the fetch failed

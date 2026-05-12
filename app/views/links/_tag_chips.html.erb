@@ -1,0 +1,8 @@
+<%# locals: (link:) %>
+<% if link.tag_list.any? %>
+  <div class="flex flex-wrap gap-1.5">
+    <% link.tag_list.each do |tag| %>
+      <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 transition"><%= tag %></span>
+    <% end %>
+  </div>
+<% end %>
