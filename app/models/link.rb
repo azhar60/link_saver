@@ -3,6 +3,8 @@ class Link < ApplicationRecord
 
   validates :url, presence: true, format: { with: %r{\Ahttps?://}, message: "must start with http:// or https://" }
 
+  scope :tagged_with, ->(tag) { where("tags ILIKE ?", "%#{sanitize_sql_like(tag.to_s)}%") }
+
   def tag_list
     tags.to_s.split(",").map(&:strip).reject(&:blank?)
   end

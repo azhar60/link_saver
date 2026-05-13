@@ -6,9 +6,11 @@
     "pending"    => "bg-gray-100 text-gray-600"
   }
 %>
-<%= link_to link, id: dom_id(link), class: "block bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md hover:border-gray-300 transition" do %>
+<div id="<%= dom_id(link) %>" class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md hover:border-gray-300 transition">
   <div class="flex items-start justify-between gap-3 mb-2">
-    <h2 class="font-semibold text-lg text-gray-900 line-clamp-2"><%= link.title.presence || link.url %></h2>
+    <h2 class="font-semibold text-lg text-gray-900 line-clamp-2">
+      <%= link_to (link.title.presence || link.url), link, class: "hover:text-blue-600" %>
+    </h2>
     <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full <%= status_classes[link.status] %>"><%= link.status %></span>
   </div>
 
@@ -19,4 +21,4 @@
   <% end %>
 
   <%= render "tag_chips", link: link %>
-<% end %>
+</div>
