@@ -4,7 +4,10 @@ class LinksController < ApplicationController
   # GET /links or /links.json
   def index
     @tag = params[:tag].presence
-    @links = @tag ? Link.tagged_with(@tag) : Link.all
+    @query = params[:q].presence
+    @links = Link.all
+    @links = @links.tagged_with(@tag) if @tag
+    @links = @links.search(@query) if @query
   end
 
   # GET /links/1 or /links/1.json

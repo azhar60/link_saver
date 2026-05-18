@@ -1,31 +1,43 @@
 <% content_for :title, "Links" %>
 
-<div class="w-full">
+<div class="w-full p-4">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex justify-between items-center mb-4">
     <h1 class="font-bold text-3xl text-gray-900">Links</h1>
     <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
   </div>
+
+  <%= form_with url: links_path, method: :get, data: { turbo_frame: "links_frame" }, class: "mb-4" do |f| %>
+    <%= hidden_field_tag :tag, @tag if @tag %>
+    <%= f.search_field :q, value: @query, placeholder: "Search title or summary…", class: "w-full sm:max-w-md rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+  <% end %>
 
   <% if @tag %>
     <div class="flex items-center gap-2 mb-4 text-sm text-gray-700">
       <span>Filtered by tag:</span>
       <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium"><%= @tag %></span>
-      <%= link_to "Clear", links_path, class: "text-gray-500 hover:text-gray-700 underline" %>
+      <%= link_to "Clear", links_path(q: @query), class: "text-gray-500 hover:text-gray-700 underline" %>
     </div>
   <% end %>
 
-  <% if @links.any? %>
-    <div id="links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <%= render @links %>
-    </div>
-  <% else %>
-    <div class="text-center py-16 border-2 border-dashed border-gray-200 rounded-lg">
-      <p class="text-gray-500 mb-4">No links yet.</p>
-      <%= link_to "Save your first link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
-    </div>
+  <%= turbo_frame_tag "links_frame" do %>
+    <% if @links.any? %>
+      <div id="links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <%= render @links %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 border-2 border-dashed border-gray-200 rounded-lg">
+        <% if @query || @tag %>
+          <p class="text-gray-500 mb-4">No links match.</p>
+          <%= link_to "Clear filters", links_path, class: "text-blue-600 hover:underline" %>
+        <% else %>
+          <p class="text-gray-500 mb-4">No links yet.</p>
+          <%= link_to "Save your first link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>

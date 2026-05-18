@@ -129,7 +129,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 
 - [x] **Day 12 — Display tags as clickable chips**
 - [x] **Day 13 — Filter links by tag**
-- [ ] **Day 14 — Add full-text search**
+- [x] **Day 14 — Add full-text search**
 - [ ] **Day 15 — Add pagination**
 
 ---
