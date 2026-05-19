@@ -73,3 +73,4 @@ end
 gem "httparty"
 gem "nokogiri"
 gem "dotenv-rails"
+gem "pagy", "~> 9.3"

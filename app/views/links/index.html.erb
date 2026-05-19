@@ -28,6 +28,13 @@
       <div id="links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= render @links %>
       </div>
+
+      <% if @pagy.pages > 1 %>
+        <nav class="mt-6 flex items-center justify-between text-sm text-gray-600">
+          <span><%= pagy_info(@pagy) %></span>
+          <span class="flex gap-2"><%== pagy_nav(@pagy) %></span>
+        </nav>
+      <% end %>
     <% else %>
       <div class="text-center py-16 border-2 border-dashed border-gray-200 rounded-lg">
         <% if @query || @tag %>
