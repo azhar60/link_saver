@@ -28,12 +28,10 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
 
-    fetch_succeeded = @link.valid? ? @link.process_via_ai : true
-
     respond_to do |format|
       if @link.save
-        flash[:alert] = "Saved, but couldn't fetch the page — title set from the URL." unless fetch_succeeded
-        format.html { redirect_to @link, notice: "Link was successfully created." }
+        ProcessLinkJob.perform_later(@link.id)
+        format.html { redirect_to @link, notice: "Saved! Fetching the page and summarizing in the background." }
         format.json { render :show, status: :created, location: @link }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -57,9 +55,9 @@ class LinksController < ApplicationController
 
   # POST /links/1/regenerate
   def regenerate
-    @link.process_via_ai
-    @link.save
-    redirect_to @link, notice: @link.ready? ? "Summary regenerated." : "Couldn't generate a summary — try again later."
+    @link.update(status: :pending)
+    ProcessLinkJob.perform_later(@link.id)
+    redirect_to @link, notice: "Regenerating in the background."
   end
 
   # DELETE /links/1 or /links/1.json

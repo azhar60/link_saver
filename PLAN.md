@@ -137,7 +137,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 ## Phase 5 — Background Jobs with Hotwire (Week 5)
 
 - [x] **Day 16 — Verify Solid Queue is set up**
-- [ ] **Day 17 — Move AI processing to a job**
+- [x] **Day 17 — Move AI processing to a job**
 - [ ] **Day 18 — Live updates with Turbo Streams**
 - [ ] **Day 19 — Stimulus controller for the create form**
 
