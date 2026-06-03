@@ -1,5 +1,7 @@
 <% content_for :title, @link.title.presence || "Showing link" %>
 
+<%= turbo_stream_from @link %>
+
 <%
   status_classes = {
     "ready"      => "bg-green-100 text-green-700",

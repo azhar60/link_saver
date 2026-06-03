@@ -1,4 +1,7 @@
 class Link < ApplicationRecord
+  broadcasts_refreshes
+  after_commit -> { broadcast_refresh_later_to("links") }, on: %i[create update destroy]
+
   enum :status, { pending: "pending", processing: "processing", ready: "ready", failed: "failed" }
 
   validates :url, presence: true, format: { with: %r{\Ahttps?://}, message: "must start with http:// or https://" }
