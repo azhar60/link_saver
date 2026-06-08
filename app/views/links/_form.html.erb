@@ -1,4 +1,4 @@
-<%= form_with(model: link, class: "contents") do |form| %>
+<%= form_with(model: link, class: "contents", data: { controller: "link-form" }) do |form| %>
   <% if link.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
       <h2><%= pluralize(link.errors.count, "error") %> prohibited this link from being saved:</h2>
@@ -37,6 +37,8 @@
   </div>
 
   <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.button class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer disabled:cursor-wait", data: { link_form_target: "submit" } do %>
+      <%= link.new_record? ? "Create Link" : "Update Link" %>
+    <% end %>
   </div>
 <% end %>

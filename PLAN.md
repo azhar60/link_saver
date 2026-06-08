@@ -139,7 +139,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [x] **Day 16 — Verify Solid Queue is set up**
 - [x] **Day 17 — Move AI processing to a job**
 - [x] **Day 18 — Live updates with Turbo Streams**
-- [ ] **Day 19 — Stimulus controller for the create form**
+- [x] **Day 19 — Stimulus controller for the create form**
 
 ---
 
