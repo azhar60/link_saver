@@ -17,7 +17,7 @@ class LinksController < ApplicationController
 
   # GET /links/new
   def new
-    @link = Link.new
+    @link = Link.new(prefill_params)
   end
 
   # GET /links/1/edit
@@ -79,5 +79,11 @@ class LinksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def link_params
       params.expect(link: [ :url, :title, :summary, :tags, :status ])
+    end
+
+    # Used by the bookmarklet to pre-fill /links/new from the page the user is on.
+    def prefill_params
+      return {} unless params[:link].is_a?(ActionController::Parameters)
+      params[:link].permit(:url, :title)
     end
 end

@@ -9,7 +9,10 @@
 
   <div class="flex justify-between items-center mb-4">
     <h1 class="font-bold text-3xl text-gray-900">Links</h1>
-    <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+    <div class="flex items-center gap-2">
+      <%= link_to "Bookmarklet", bookmarklet_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+      <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+    </div>
   </div>
 
   <%= form_with url: links_path, method: :get, data: { turbo_frame: "links_frame" }, class: "mb-4" do |f| %>
