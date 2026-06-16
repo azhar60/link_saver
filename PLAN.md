@@ -149,7 +149,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [ ] Browser extension
 - [ ] Weekly digest email
 - [ ] Reading time estimate
-- [ ] Archive read links
+- [x] Archive read links
 - [ ] Export to JSON/CSV
 - [ ] Dark mode toggle
 - [ ] Postgres full-text search (pg_search)

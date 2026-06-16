@@ -11,6 +11,12 @@ class Link < ApplicationRecord
     term = "%#{sanitize_sql_like(query.to_s)}%"
     where("title ILIKE :t OR summary ILIKE :t", t: term)
   }
+  scope :active,   -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
+  def archived? = archived_at.present?
+  def archive!   = update!(archived_at: Time.current)
+  def unarchive! = update!(archived_at: nil)
 
   def tag_list
     tags.to_s.split(",").map(&:strip).reject(&:blank?)

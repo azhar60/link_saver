@@ -5,7 +5,9 @@ class LinksController < ApplicationController
   def index
     @tag = params[:tag].presence
     @query = params[:q].presence
-    scope = Link.order(created_at: :desc)
+    @show_archived = ActiveModel::Type::Boolean.new.cast(params[:archived])
+    scope = @show_archived ? Link.archived : Link.active
+    scope = scope.order(created_at: :desc)
     scope = scope.tagged_with(@tag) if @tag
     scope = scope.search(@query) if @query
     @pagy, @links = pagy(scope)

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :links do
     member { post :regenerate }
+    resource :archive, only: %i[create destroy], module: :links
   end
 
   get "bookmarklet" => "bookmarklet#show", as: :bookmarklet

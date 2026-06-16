@@ -8,10 +8,15 @@
   <% end %>
 
   <div class="flex justify-between items-center mb-4">
-    <h1 class="font-bold text-3xl text-gray-900">Links</h1>
-    <div class="flex items-center gap-2">
-      <%= link_to "Bookmarklet", bookmarklet_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
-      <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+    <h1 class="font-bold text-3xl text-gray-900"><%= @show_archived ? "Archive" : "Links" %></h1>
+    <div class="flex items-center gap-3">
+      <% if @show_archived %>
+        <%= link_to "← Back to active links", links_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+      <% else %>
+        <%= link_to "View archive", links_path(archived: true), class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+        <%= link_to "Bookmarklet", bookmarklet_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+        <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+      <% end %>
     </div>
   </div>
 
