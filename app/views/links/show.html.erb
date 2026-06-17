@@ -43,9 +43,14 @@
       <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full <%= status_classes[@link.status] %>"><%= @link.status %></span>
     </div>
 
-    <p class="text-sm text-gray-500 break-all mb-4">
+    <p class="text-sm text-gray-500 break-all mb-1">
       <%= link_to @link.url, @link.url, target: "_blank", rel: "noopener", class: "hover:text-blue-600 hover:underline" %>
     </p>
+    <% if (mins = @link.reading_time_minutes) %>
+      <p class="text-xs text-gray-400 mb-4"><%= mins %> min read</p>
+    <% else %>
+      <div class="mb-4"></div>
+    <% end %>
 
     <% if @link.summary.present? %>
       <div class="mb-4">

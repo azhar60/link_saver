@@ -14,7 +14,12 @@
     <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full <%= status_classes[link.status] %>"><%= link.status %></span>
   </div>
 
-  <p class="text-sm text-gray-500 truncate mb-3"><%= link.url %></p>
+  <p class="text-sm text-gray-500 truncate mb-1"><%= link.url %></p>
+  <% if (mins = link.reading_time_minutes) %>
+    <p class="text-xs text-gray-400 mb-3"><%= mins %> min read</p>
+  <% else %>
+    <div class="mb-3"></div>
+  <% end %>
 
   <% if link.summary.present? %>
     <p class="text-sm text-gray-700 line-clamp-3 mb-3"><%= link.summary %></p>

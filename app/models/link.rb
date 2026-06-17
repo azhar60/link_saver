@@ -18,6 +18,13 @@ class Link < ApplicationRecord
   def archive!   = update!(archived_at: Time.current)
   def unarchive! = update!(archived_at: nil)
 
+  WORDS_PER_MINUTE = 200
+
+  def reading_time_minutes
+    return nil unless word_count&.positive?
+    [(word_count.to_f / WORDS_PER_MINUTE).ceil, 1].max
+  end
+
   def tag_list
     tags.to_s.split(",").map(&:strip).reject(&:blank?)
   end
@@ -30,7 +37,9 @@ class Link < ApplicationRecord
   def process_via_ai
     fetched = PageFetcher.fetch(url)
     self.title = fetched&.dig(:title).presence || fallback_title if title.blank?
-    apply_ai_summary(fetched&.dig(:content))
+    content = fetched&.dig(:content)
+    self.word_count = content.to_s.split.length if content.present?
+    apply_ai_summary(content)
     fetched.present?
   rescue => e
     Rails.logger.warn("[Link#process_via_ai] #{id || url}: #{e.class} #{e.message}")
