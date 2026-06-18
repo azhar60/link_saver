@@ -25,6 +25,27 @@ class Link < ApplicationRecord
     [(word_count.to_f / WORDS_PER_MINUTE).ceil, 1].max
   end
 
+  # Other non-archived links that share at least one tag.
+  # Ranks by number of overlapping tags, then most recent.
+  def related(limit: 5)
+    return [] if tag_list.empty?
+
+    likes      = tag_list.map { |t| "%#{Link.sanitize_sql_like(t)}%" }
+    where_expr = tag_list.map { "tags ILIKE ?" }.join(" OR ")
+
+    candidates = Link.active
+                     .where.not(id: id)
+                     .where(where_expr, *likes)
+                     .order(created_at: :desc)
+                     .limit(limit * 3)
+                     .to_a
+
+    my_tags = tag_list.map(&:downcase).to_set
+    candidates
+      .sort_by { |c| [ -(c.tag_list.map(&:downcase).to_set & my_tags).size, -c.created_at.to_i ] }
+      .first(limit)
+  end
+
   def tag_list
     tags.to_s.split(",").map(&:strip).reject(&:blank?)
   end

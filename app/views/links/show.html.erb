@@ -67,6 +67,22 @@
     <% end %>
   </div>
 
+  <% if @related.any? %>
+    <div class="mb-5">
+      <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Related</h2>
+      <ul class="divide-y divide-gray-100 bg-white border border-gray-200 rounded-lg">
+        <% @related.each do |r| %>
+          <li class="p-3 hover:bg-gray-50">
+            <%= link_to r, class: "block" do %>
+              <p class="font-medium text-gray-900 line-clamp-1"><%= r.title.presence || r.url %></p>
+              <p class="text-xs text-gray-500 truncate"><%= r.tag_list.join(", ") %></p>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <%= link_to "Edit this link", edit_link_path(@link), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
   <%= button_to "Regenerate summary", regenerate_link_path(@link), method: :post, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
   <% if @link.archived? %>

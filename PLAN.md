@@ -155,5 +155,5 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [ ] Postgres full-text search (pg_search)
 - [ ] Deploy (Fly.io / Render)
 - [ ] Public sharing
-- [ ] Related links
+- [x] Related links
 - [ ] Auth

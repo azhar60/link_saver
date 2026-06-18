@@ -15,6 +15,7 @@ class LinksController < ApplicationController
 
   # GET /links/1 or /links/1.json
   def show
+    @related = @link.related(limit: 5)
   end
 
   # GET /links/new
