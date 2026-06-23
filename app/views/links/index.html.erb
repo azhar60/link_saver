@@ -15,6 +15,8 @@
       <% else %>
         <%= link_to "View archive", links_path(archived: true), class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
         <%= link_to "Bookmarklet", bookmarklet_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+        <%= link_to "Export JSON", export_links_path(format: :json), class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+        <%= link_to "Export CSV",  export_links_path(format: :csv),  class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
         <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
       <% end %>
     </div>

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :links do
+    collection { get :export }
     member { post :regenerate }
     resource :archive, only: %i[create destroy], module: :links
   end

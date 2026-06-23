@@ -150,7 +150,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [ ] Weekly digest email
 - [x] Reading time estimate
 - [x] Archive read links
-- [ ] Export to JSON/CSV
+- [x] Export to JSON/CSV
 - [ ] Dark mode toggle
 - [ ] Postgres full-text search (pg_search)
 - [ ] Deploy (Fly.io / Render)

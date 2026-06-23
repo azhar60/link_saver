@@ -56,6 +56,15 @@ class LinksController < ApplicationController
     end
   end
 
+  # GET /links/export.(json|csv)
+  def export
+    links = Link.order(created_at: :desc)
+    respond_to do |format|
+      format.json { send_data links.map(&method(:export_row)).to_json, filename: "links-#{Date.current.iso8601}.json", type: "application/json" }
+      format.csv  { send_data export_csv(links), filename: "links-#{Date.current.iso8601}.csv", type: "text/csv" }
+    end
+  end
+
   # POST /links/1/regenerate
   def regenerate
     @link.update(status: :pending)
@@ -88,5 +97,31 @@ class LinksController < ApplicationController
     def prefill_params
       return {} unless params[:link].is_a?(ActionController::Parameters)
       params[:link].permit(:url, :title)
+    end
+
+    EXPORT_COLUMNS = %i[url title summary tags status archived reading_time_minutes created_at].freeze
+
+    def export_row(link)
+      {
+        url: link.url,
+        title: link.title,
+        summary: link.summary,
+        tags: link.tag_list,
+        status: link.status,
+        archived: link.archived?,
+        reading_time_minutes: link.reading_time_minutes,
+        created_at: link.created_at.iso8601
+      }
+    end
+
+    def export_csv(links)
+      require "csv"
+      CSV.generate do |csv|
+        csv << EXPORT_COLUMNS.map(&:to_s)
+        links.each do |link|
+          row = export_row(link)
+          csv << EXPORT_COLUMNS.map { |c| c == :tags ? row[c].join(",") : row[c] }
+        end
+      end
     end
 end
