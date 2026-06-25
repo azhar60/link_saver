@@ -1,4 +1,6 @@
 class Link < ApplicationRecord
+  include PgSearch::Model
+
   broadcasts_refreshes
   after_commit -> { broadcast_refresh_later_to("links") }, on: %i[create update destroy]
 
@@ -7,12 +9,14 @@ class Link < ApplicationRecord
   validates :url, presence: true, format: { with: %r{\Ahttps?://}, message: "must start with http:// or https://" }
 
   scope :tagged_with, ->(tag) { where("tags ILIKE ?", "%#{sanitize_sql_like(tag.to_s)}%") }
-  scope :search, ->(query) {
-    term = "%#{sanitize_sql_like(query.to_s)}%"
-    where("title ILIKE :t OR summary ILIKE :t", t: term)
-  }
   scope :active,   -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+
+  pg_search_scope :search,
+    against: { title: "A", summary: "B" },
+    using: {
+      tsearch: { prefix: true, dictionary: "english", any_word: true }
+    }
 
   def archived? = archived_at.present?
   def archive!   = update!(archived_at: Time.current)

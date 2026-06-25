@@ -152,7 +152,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [x] Archive read links
 - [x] Export to JSON/CSV
 - [ ] Dark mode toggle
-- [ ] Postgres full-text search (pg_search)
+- [x] Postgres full-text search (pg_search)
 - [ ] Deploy (Fly.io / Render)
 - [ ] Public sharing
 - [x] Related links
