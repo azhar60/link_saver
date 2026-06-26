@@ -2,36 +2,46 @@
 
 <%= turbo_stream_from "links" %>
 
-<div class="w-full p-4">
+<div>
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="alert alert-success mb-5" id="notice"><%= notice %></div>
   <% end %>
 
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="font-bold text-3xl text-gray-900"><%= @show_archived ? "Archive" : "Links" %></h1>
-    <div class="flex items-center gap-3">
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
+        <span class="text-gradient"><%= @show_archived ? "Archive" : "Your library" %></span>
+      </h1>
+      <p class="text-sm text-mist-400 mt-1">
+        <%= @show_archived ? "Links you've finished with." : "Saved links, summarized by AI." %>
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 text-sm">
       <% if @show_archived %>
-        <%= link_to "← Back to active links", links_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
+        <%= link_to "← Back to active", links_path, class: "text-mist-300 hover:text-mist-100" %>
       <% else %>
-        <%= link_to "View archive", links_path(archived: true), class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
-        <%= link_to "Bookmarklet", bookmarklet_path, class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
-        <%= link_to "Export JSON", export_links_path(format: :json), class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
-        <%= link_to "Export CSV",  export_links_path(format: :csv),  class: "text-sm text-gray-600 hover:text-gray-900 underline" %>
-        <%= link_to "New link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+        <%= link_to "Archive →", links_path(archived: true), class: "text-mist-300 hover:text-mist-100" %>
+        <span class="text-mist-500">·</span>
+        <%= link_to "Export JSON", export_links_path(format: :json), class: "text-mist-300 hover:text-mist-100" %>
+        <%= link_to "Export CSV",  export_links_path(format: :csv),  class: "text-mist-300 hover:text-mist-100" %>
       <% end %>
     </div>
   </div>
 
-  <%= form_with url: links_path, method: :get, data: { turbo_frame: "links_frame" }, class: "mb-4" do |f| %>
+  <%= form_with url: links_path, method: :get, data: { turbo_frame: "links_frame" }, class: "mb-5" do |f| %>
     <%= hidden_field_tag :tag, @tag if @tag %>
-    <%= f.search_field :q, value: @query, placeholder: "Search title or summary…", class: "w-full sm:max-w-md rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    <%= hidden_field_tag :archived, @show_archived if @show_archived %>
+    <div class="relative">
+      <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-mist-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <%= f.search_field :q, value: @query, placeholder: "Search title or summary…", class: "input pl-10" %>
+    </div>
   <% end %>
 
   <% if @tag %>
-    <div class="flex items-center gap-2 mb-4 text-sm text-gray-700">
-      <span>Filtered by tag:</span>
-      <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium"><%= @tag %></span>
-      <%= link_to "Clear", links_path(q: @query), class: "text-gray-500 hover:text-gray-700 underline" %>
+    <div class="flex items-center gap-2 mb-5 text-sm">
+      <span class="text-mist-400">Filtered by tag:</span>
+      <span class="chip chip-processing"><%= @tag %></span>
+      <%= link_to "Clear", links_path(q: @query), class: "text-mist-400 hover:text-mist-100 underline" %>
     </div>
   <% end %>
 
@@ -42,19 +52,20 @@
       </div>
 
       <% if @pagy.pages > 1 %>
-        <nav class="mt-6 flex items-center justify-between text-sm text-gray-600">
-          <span><%= pagy_info(@pagy) %></span>
-          <span class="flex gap-2"><%== pagy_nav(@pagy) %></span>
+        <nav class="pagy-wrap" aria-label="Pagination">
+          <%== pagy_info(@pagy) %>
+          <%== pagy_nav(@pagy) %>
         </nav>
       <% end %>
     <% else %>
-      <div class="text-center py-16 border-2 border-dashed border-gray-200 rounded-lg">
+      <div class="text-center py-16 glass rounded-2xl">
         <% if @query || @tag %>
-          <p class="text-gray-500 mb-4">No links match.</p>
-          <%= link_to "Clear filters", links_path, class: "text-blue-600 hover:underline" %>
+          <p class="text-mist-300 mb-4">No links match.</p>
+          <%= link_to "Clear filters", links_path, class: "btn-ghost" %>
         <% else %>
-          <p class="text-gray-500 mb-4">No links yet.</p>
-          <%= link_to "Save your first link", new_link_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+          <p class="text-mist-300 mb-1">Your library is empty.</p>
+          <p class="text-sm text-mist-400 mb-5">Save your first link to get an AI summary in seconds.</p>
+          <%= link_to "Save your first link", new_link_path, class: "btn-primary" %>
         <% end %>
       </div>
     <% end %>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="dark">
   <head>
     <title><%= content_for(:title) || "Link Saver" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#0a0d14">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Link Saver">
     <meta name="mobile-web-app-capable" content="yes">
@@ -11,24 +12,49 @@
     <meta name="turbo-refresh-method" content="morph">
     <meta name="turbo-refresh-scroll" content="preserve">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="min-h-screen text-mist-100 antialiased">
+    <header class="sticky top-0 z-40 glass-strong">
+      <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <%= link_to links_path, class: "flex items-center gap-2.5 group" do %>
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-cv shadow-glow-cyan">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </span>
+          <span class="font-semibold tracking-tight text-mist-100 group-hover:text-white">Link Saver</span>
+        <% end %>
+        <div class="flex items-center gap-2">
+          <%= link_to "Bookmarklet", bookmarklet_path, class: "hidden sm:inline-block text-sm text-mist-300 hover:text-mist-100 transition" %>
+          <%= link_to "Archive", links_path(archived: true), class: "hidden sm:inline-block text-sm text-mist-300 hover:text-mist-100 transition" %>
+          <%= link_to new_link_path, class: "btn-primary !py-2 !px-3.5 text-sm" do %>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New link
+          <% end %>
+        </div>
+      </nav>
+    </header>
+
     <% if flash[:alert].present? %>
-      <p class="py-2 px-3 bg-amber-50 mb-4 text-amber-800 font-medium rounded-md mx-4 mt-4"><%= flash[:alert] %></p>
+      <div class="max-w-6xl mx-auto px-4 mt-4">
+        <div class="alert alert-warning"><%= flash[:alert] %></div>
+      </div>
     <% end %>
-    <%= yield %>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+      <%= yield %>
+    </main>
   </body>
 </html>

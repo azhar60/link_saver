@@ -1,95 +1,102 @@
-<% content_for :title, @link.title.presence || "Showing link" %>
+<% content_for :title, @link.title.presence || "Link" %>
 
 <%= turbo_stream_from @link %>
 
 <%
-  status_classes = {
-    "ready"      => "bg-green-100 text-green-700",
-    "processing" => "bg-blue-100 text-blue-700",
-    "failed"     => "bg-red-100 text-red-700",
-    "pending"    => "bg-gray-100 text-gray-600"
-  }
+  status_chip = {
+    "ready"      => "chip-ready",
+    "processing" => "chip-processing",
+    "pending"    => "chip-pending",
+    "failed"     => "chip-failed"
+  }[@link.status] || "chip"
 %>
 
-<div class="md:w-2/3 w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
-  <% if @link.pending? || @link.processing? %>
-    <div class="mb-5 p-4 bg-blue-50 border border-blue-200 rounded-md text-blue-800 flex items-center gap-3">
-      <svg class="animate-spin h-5 w-5 text-blue-600 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"></path>
-      </svg>
-      <div>
-        <strong class="font-semibold">Processing this link…</strong>
-        <p class="text-sm">Fetching the page and asking the AI for a summary. Refresh in a moment.</p>
-      </div>
-    </div>
-  <% elsif @link.failed? %>
-    <div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-      <div class="text-red-800">
-        <strong class="font-semibold">Couldn't summarize this page.</strong>
-        <p class="text-sm">The page might be unreachable or the AI service is unavailable.</p>
-      </div>
-      <%= button_to "Retry summary", regenerate_link_path(@link), method: :post, class: "shrink-0 rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer" %>
-    </div>
-  <% end %>
-
-  <div id="<%= dom_id(@link) %>" class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm mb-5">
-    <div class="flex items-start justify-between gap-3 mb-3">
-      <h1 class="font-bold text-2xl text-gray-900"><%= @link.title.presence || @link.url %></h1>
-      <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full <%= status_classes[@link.status] %>"><%= @link.status %></span>
-    </div>
-
-    <p class="text-sm text-gray-500 break-all mb-1">
-      <%= link_to @link.url, @link.url, target: "_blank", rel: "noopener", class: "hover:text-blue-600 hover:underline" %>
-    </p>
-    <% if (mins = @link.reading_time_minutes) %>
-      <p class="text-xs text-gray-400 mb-4"><%= mins %> min read</p>
-    <% else %>
-      <div class="mb-4"></div>
+<div class="lg:grid lg:grid-cols-3 lg:gap-8">
+  <div class="lg:col-span-2">
+    <% if notice.present? %>
+      <div class="alert alert-success mb-5" id="notice"><%= notice %></div>
     <% end %>
 
-    <% if @link.summary.present? %>
-      <div class="mb-4">
-        <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">Summary</h2>
-        <p class="text-gray-800 leading-relaxed"><%= @link.summary %></p>
+    <%= link_to links_path, class: "inline-flex items-center gap-1.5 text-sm text-mist-400 hover:text-mist-100 mb-4 transition" do %>
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to library
+    <% end %>
+
+    <% if @link.pending? || @link.processing? %>
+      <div class="alert alert-info mb-5 flex items-center gap-3">
+        <svg class="animate-spin h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+          <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+        </svg>
+        <div>
+          <strong class="font-semibold">Processing this link…</strong>
+          <p class="text-xs opacity-80 mt-0.5">Fetching the page and asking the AI for a summary. This page will update automatically.</p>
+        </div>
+      </div>
+    <% elsif @link.failed? %>
+      <div class="alert alert-error mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <strong class="font-semibold">Couldn't summarize this page.</strong>
+          <p class="text-xs opacity-80 mt-0.5">The page might be unreachable or the AI service is unavailable.</p>
+        </div>
+        <%= button_to "Retry summary", regenerate_link_path(@link), method: :post, class: "btn-primary !py-2 text-sm shrink-0" %>
       </div>
     <% end %>
 
-    <% if @link.tag_list.any? %>
-      <div>
-        <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Tags</h2>
-        <%= render "tag_chips", link: @link %>
+    <article id="<%= dom_id(@link) %>" class="glass-strong rounded-2xl p-6 sm:p-8 shadow-glass mb-5">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <h1 class="font-bold text-2xl sm:text-3xl tracking-tight text-mist-100"><%= @link.title.presence || @link.url %></h1>
+        <span class="chip <%= status_chip %> shrink-0"><%= @link.status %></span>
       </div>
-    <% end %>
+
+      <a href="<%= @link.url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-sm text-mist-400 hover:text-cyan-300 transition break-all">
+        <%= @link.url %>
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <% if (mins = @link.reading_time_minutes) %>
+        <p class="text-xs text-mist-500 mt-1"><%= mins %> min read</p>
+      <% end %>
+
+      <% if @link.summary.present? %>
+        <div class="mt-6">
+          <h2 class="text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-400 mb-2">Summary</h2>
+          <p class="text-mist-200 leading-relaxed text-[15px]"><%= @link.summary %></p>
+        </div>
+      <% end %>
+
+      <% if @link.tag_list.any? %>
+        <div class="mt-6">
+          <h2 class="text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-400 mb-2">Tags</h2>
+          <%= render "tag_chips", link: @link %>
+        </div>
+      <% end %>
+    </article>
+
+    <div class="flex flex-wrap gap-2">
+      <%= link_to "Edit", edit_link_path(@link), class: "btn-ghost text-sm" %>
+      <%= button_to "Regenerate summary", regenerate_link_path(@link), method: :post, class: "btn-primary text-sm" %>
+      <% if @link.archived? %>
+        <%= button_to "Restore", link_archive_path(@link), method: :delete, class: "btn-ghost text-sm" %>
+      <% else %>
+        <%= button_to "Archive", link_archive_path(@link), method: :post, class: "btn-ghost text-sm" %>
+      <% end %>
+      <%= button_to "Delete", @link, method: :delete, class: "btn-danger text-sm ml-auto", data: { turbo_confirm: "Delete this link?" } %>
+    </div>
   </div>
 
   <% if @related.any? %>
-    <div class="mb-5">
-      <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Related</h2>
-      <ul class="divide-y divide-gray-100 bg-white border border-gray-200 rounded-lg">
+    <aside class="lg:col-span-1 mt-8 lg:mt-0">
+      <h2 class="text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-400 mb-3">Related</h2>
+      <div class="space-y-2">
         <% @related.each do |r| %>
-          <li class="p-3 hover:bg-gray-50">
-            <%= link_to r, class: "block" do %>
-              <p class="font-medium text-gray-900 line-clamp-1"><%= r.title.presence || r.url %></p>
-              <p class="text-xs text-gray-500 truncate"><%= r.tag_list.join(", ") %></p>
+          <%= link_to r, class: "block glass rounded-xl p-3 hover:border-white/15 transition" do %>
+            <p class="font-medium text-sm text-mist-100 line-clamp-1"><%= r.title.presence || r.url %></p>
+            <% if r.tag_list.any? %>
+              <p class="text-[11px] text-mist-400 truncate mt-0.5"><%= r.tag_list.join(" · ") %></p>
             <% end %>
-          </li>
+          <% end %>
         <% end %>
-      </ul>
-    </div>
+      </div>
+    </aside>
   <% end %>
-
-  <%= link_to "Edit this link", edit_link_path(@link), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Regenerate summary", regenerate_link_path(@link), method: :post, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
-  <% if @link.archived? %>
-    <%= button_to "Restore", link_archive_path(@link), method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium cursor-pointer" %>
-  <% else %>
-    <%= button_to "Archive", link_archive_path(@link), method: :post, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium cursor-pointer" %>
-  <% end %>
-  <%= link_to "Back to links", links_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this link", @link, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
 </div>

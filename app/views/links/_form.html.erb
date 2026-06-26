@@ -1,9 +1,8 @@
 <%= form_with(model: link, class: "contents", data: { controller: "link-form" }) do |form| %>
   <% if link.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(link.errors.count, "error") %> prohibited this link from being saved:</h2>
-
-      <ul class="list-disc ml-6">
+    <div class="alert alert-error mb-5">
+      <p class="font-semibold mb-1"><%= pluralize(link.errors.count, "error") %> prohibited this link from being saved:</p>
+      <ul class="list-disc ml-5 space-y-0.5 opacity-90">
         <% link.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,34 +10,32 @@
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :url %>
-    <%= form.text_field :url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": link.errors[:url].none?, "border-red-400 focus:outline-red-600": link.errors[:url].any?}] %>
+  <div class="space-y-5">
+    <div>
+      <%= form.label :url, class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+      <%= form.text_field :url, placeholder: "https://...", class: "input #{'input-error' if link.errors[:url].any?}" %>
+    </div>
+
+    <div>
+      <%= form.label :title, class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+      <%= form.text_field :title, placeholder: "Leave blank to auto-fetch", class: "input #{'input-error' if link.errors[:title].any?}" %>
+    </div>
+
+    <div>
+      <%= form.label :summary, class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+      <%= form.textarea :summary, rows: 4, placeholder: "Leave blank to let Gemini summarize", class: "input #{'input-error' if link.errors[:summary].any?}" %>
+    </div>
+
+    <div>
+      <%= form.label :tags, class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+      <%= form.text_field :tags, placeholder: "ruby, rails, hotwire", class: "input #{'input-error' if link.errors[:tags].any?}" %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :title %>
-    <%= form.text_field :title, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": link.errors[:title].none?, "border-red-400 focus:outline-red-600": link.errors[:title].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :summary %>
-    <%= form.textarea :summary, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": link.errors[:summary].none?, "border-red-400 focus:outline-red-600": link.errors[:summary].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :tags %>
-    <%= form.text_field :tags, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": link.errors[:tags].none?, "border-red-400 focus:outline-red-600": link.errors[:tags].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :status %>
-    <%= form.text_field :status, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": link.errors[:status].none?, "border-red-400 focus:outline-red-600": link.errors[:status].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.button class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer disabled:cursor-wait", data: { link_form_target: "submit" } do %>
-      <%= link.new_record? ? "Create Link" : "Update Link" %>
+  <div class="mt-7 flex gap-2">
+    <%= form.button class: "btn-primary disabled:cursor-wait", data: { link_form_target: "submit" } do %>
+      <%= link.new_record? ? "Save link" : "Update link" %>
     <% end %>
+    <%= link_to "Cancel", (link.persisted? ? link : links_path), class: "btn-ghost" %>
   </div>
 <% end %>

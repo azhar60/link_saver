@@ -1,9 +1,14 @@
 <% content_for :title, "New link" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New link</h1>
+<div class="max-w-2xl mx-auto">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold tracking-tight">
+      <span class="text-gradient">Save a link</span>
+    </h1>
+    <p class="text-sm text-mist-400 mt-1">Paste a URL. We'll fetch the page, summarize it, and tag it for you.</p>
+  </div>
 
-  <%= render "form", link: @link %>
-
-  <%= link_to "Back to links", links_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="glass-strong rounded-2xl p-6 sm:p-8 shadow-glass">
+    <%= render "form", link: @link %>
+  </div>
 </div>
