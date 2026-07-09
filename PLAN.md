@@ -146,7 +146,7 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 ## Phase 6 — Convenience Features (Week 6+)
 
 - [x] Bookmarklet
-- [ ] Browser extension
+- [x] Browser extension
 - [ ] Weekly digest email
 - [x] Reading time estimate
 - [x] Archive read links

@@ -55,6 +55,11 @@ bin/jobs             # background worker (Solid Queue)
 bin/rails test
 ```
 
+## Saving from anywhere
+
+- **Bookmarklet** — visit `/bookmarklet` in the running app, drag the button to your bookmarks bar.
+- **Browser extension** — `browser_extension/` is a Manifest V3 extension for Chrome / Edge / Brave. Load unpacked from `chrome://extensions`. See [`browser_extension/README.md`](browser_extension/README.md).
+
 ## Project plan
 
 See [`PLAN.md`](PLAN.md) for the day-by-day build plan.
