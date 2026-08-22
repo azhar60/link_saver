@@ -16,3 +16,14 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
+
+module SignInHelper
+  # The plaintext matches the digest in test/fixtures/users.yml.
+  def sign_in_as(user, password: "secret123")
+    post session_url, params: { email_address: user.email_address, password: password }
+  end
+end
+
+class ActionDispatch::IntegrationTest
+  include SignInHelper
+end

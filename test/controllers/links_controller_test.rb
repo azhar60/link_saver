@@ -2,6 +2,7 @@ require "test_helper"
 
 class LinksControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in_as users(:owner)
     @link = links(:one)
   end
 
