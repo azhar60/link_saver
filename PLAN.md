@@ -156,4 +156,4 @@ Goal: actually useful for daily use — search, tag filtering, better UI.
 - [ ] Deploy (Fly.io / Render)
 - [ ] Public sharing
 - [x] Related links
-- [ ] Auth
+- [x] Auth

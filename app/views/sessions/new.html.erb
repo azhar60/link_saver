@@ -1,27 +1,36 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
-  <% end %>
+<% content_for :title, "Sign in · Link Saver" %>
 
-  <% if notice = flash[:notice] %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
-  <h1 class="font-bold text-4xl">Sign in</h1>
-
-  <%= form_with url: session_url, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", class: "block shadow rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="my-5">
-      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-      <div class="inline">
-        <%= form.submit "Sign in", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+<div class="max-w-sm mx-auto mt-10 sm:mt-16">
+  <div class="glass-strong rounded-2xl p-6 sm:p-8">
+    <div class="flex items-center gap-2.5 mb-7">
+      <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-cv shadow-glow-cyan">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      </span>
+      <div>
+        <h1 class="font-semibold tracking-tight text-mist-100 leading-tight">Link Saver</h1>
+        <p class="text-xs text-mist-400">Sign in to continue</p>
       </div>
     </div>
-  <% end %>
+
+    <%= form_with url: session_path, class: "contents" do |form| %>
+      <div class="space-y-5">
+        <div>
+          <%= form.label :email_address, "Email", class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "you@example.com", class: "input" %>
+        </div>
+
+        <div>
+          <%= form.label :password, "Password", class: "block text-xs font-medium uppercase tracking-wider text-mist-400 mb-1.5" %>
+          <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "input" %>
+        </div>
+      </div>
+
+      <div class="mt-7">
+        <%= form.submit "Sign in", class: "btn-primary w-full cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
 </div>

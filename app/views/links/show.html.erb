@@ -13,10 +13,6 @@
 
 <div class="lg:grid lg:grid-cols-3 lg:gap-8">
   <div class="lg:col-span-2">
-    <% if notice.present? %>
-      <div class="alert alert-success mb-5" id="notice"><%= notice %></div>
-    <% end %>
-
     <%= link_to links_path, class: "inline-flex items-center gap-1.5 text-sm text-mist-400 hover:text-mist-100 mb-4 transition" do %>
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
       Back to library

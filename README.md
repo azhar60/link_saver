@@ -30,15 +30,24 @@ bundle install
 
 # 3. Create and migrate the databases
 bin/rails db:create db:migrate
+
+# 4. Create the owner account from OWNER_EMAIL / OWNER_PASSWORD
+bin/rails db:seed
 ```
+
+The app has exactly one account and no signup page. `bin/rails db:seed` creates the owner,
+and running it again rotates the password to whatever `.env` currently holds. If the two
+`OWNER_*` variables are unset, seeding skips with a warning and sign-in is impossible.
 
 ### Required environment variables
 
 The app reads these from `.env` (loaded automatically by `dotenv-rails`):
 
-| Variable         | Required | Notes                                                             |
-| ---------------- | -------- | ----------------------------------------------------------------- |
-| `GEMINI_API_KEY` | yes      | Free key from https://aistudio.google.com/apikey. Never commit it. |
+| Variable          | Required | Notes                                                                     |
+| ----------------- | -------- | ------------------------------------------------------------------------- |
+| `GEMINI_API_KEY`  | yes      | Free key from https://aistudio.google.com/apikey. Never commit it.         |
+| `OWNER_EMAIL`     | yes      | The single account that can sign in. Applied by `bin/rails db:seed`.       |
+| `OWNER_PASSWORD`  | yes      | At least 12 characters. Re-seeding rotates it. Never commit it.           |
 
 `.env` is gitignored — every developer creates their own.
 
@@ -48,6 +57,29 @@ The app reads these from `.env` (loaded automatically by `dotenv-rails`):
 bin/rails server     # http://localhost:3000/links
 bin/jobs             # background worker (Solid Queue)
 ```
+
+## Before deploying
+
+The app is gated but not yet hardened for the public internet. Three things to do first:
+
+1. **Wire a durable cache store.** `solid_cache` is in the Gemfile and `config/database.yml`
+   already declares a production `cache:` database, but the gem was never installed. Run
+   `bin/rails solid_cache:install`, create and migrate that database, and set
+   `config.cache_store = :solid_cache_store`. Until then the sign-in rate limit
+   (10 attempts / 3 minutes) lives in `tmp/cache` and resets on every release.
+2. **Enable TLS.** Set `config.force_ssl = true` in `config/environments/production.rb`
+   (or `assume_ssl` if TLS terminates upstream). The session cookie is `httponly` and
+   `same_site: :lax` but not `secure` without it, so it can travel over plain HTTP.
+3. **Know how to revoke access.** Re-seeding rotates the password but does *not* invalidate
+   existing sessions — `resume_session` only checks the cookie against the `sessions` row.
+   To cut off a stolen cookie, run `Session.delete_all` from the console. There is
+   deliberately no session-management UI.
+
+One accepted rough edge: the post-sign-in redirect stores the full requested URL in the
+4KB cookie session, so a very long page URL and title arriving from the browser extension
+can raise `CookieOverflow`. If that ever happens, store `request.fullpath` instead of
+`request.url` in `Authentication#request_authentication`, or skip the stash past a length
+threshold.
 
 ## Tests
 
